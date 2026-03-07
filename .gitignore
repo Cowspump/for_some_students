@@ -1,0 +1,5 @@
+node_modules
+.idea
+.claude
+.vercel
+convert.ps1
