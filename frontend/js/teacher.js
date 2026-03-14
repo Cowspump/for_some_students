@@ -105,7 +105,58 @@ const Teacher = {
         <button type="submit" class="btn btn-primary" style="background:#8b5cf6;">Сақтау</button>
       </form>
       <p id="apiKeyStatus" style="margin-top:8px;font-size:0.85rem;color:#666;">${OpenAI.getKey() ? '✅ API кілті орнатылған' : '⚠️ API кілті орнатылмаған'}</p>
-    </div>`;
+    </div>
+    ${this.renderRating(groups, students, results)}`;
+  },
+
+  renderRating(groups, students, results) {
+    if (students.length === 0) return '';
+
+    // Calculate stats per student
+    const rating = students.map(s => {
+      const sr = results.filter(r => r.userId === s.id);
+      const total = sr.length;
+      const avg = total > 0 ? Math.round(sr.reduce((sum, r) => sum + (r.score / r.total) * 100, 0) / total) : 0;
+      const group = groups.find(g => g.id === s.groupId);
+      return { id: s.id, name: s.name, group: group ? group.name : '—', total, avg };
+    }).sort((a, b) => b.avg - a.avg || b.total - a.total);
+
+    const medal = (i) => i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}`;
+    const statusBadge = (avg, total) => {
+      if (total === 0) return '<span style="background:#f1f5f9;color:#64748b;padding:2px 10px;border-radius:20px;font-size:0.8rem;font-weight:600;">Тест тапсырмаған</span>';
+      if (avg >= 80) return '<span style="background:#dcfce7;color:#166534;padding:2px 10px;border-radius:20px;font-size:0.8rem;font-weight:600;">Жарайсың!</span>';
+      if (avg >= 60) return '<span style="background:#fef9c3;color:#854d0e;padding:2px 10px;border-radius:20px;font-size:0.8rem;font-weight:600;">Жақсы</span>';
+      return '<span style="background:#fef2f2;color:#991b1b;padding:2px 10px;border-radius:20px;font-size:0.8rem;font-weight:600;">Көмек қажет</span>';
+    };
+    const bar = (avg) => `<div style="width:100%;background:#f1f5f9;border-radius:100px;height:8px;"><div style="width:${avg}%;height:100%;border-radius:100px;background:${avg >= 80 ? 'var(--success)' : avg >= 60 ? '#f59e0b' : 'var(--danger)'};"></div></div>`;
+
+    let html = `<div class="card">
+      <div class="card-header"><h3>Студенттер рейтингі</h3></div>
+      <div style="overflow-x:auto;">
+        <table class="results-table" style="width:100%;">
+          <thead><tr>
+            <th style="width:40px;">#</th>
+            <th>Студент</th>
+            <th>Топ</th>
+            <th style="width:80px;">Тесттер</th>
+            <th style="width:200px;">Орташа балл</th>
+            <th>Деңгей</th>
+          </tr></thead>
+          <tbody>`;
+
+    rating.forEach((s, i) => {
+      html += `<tr>
+        <td style="text-align:center;font-size:1.1rem;">${medal(i)}</td>
+        <td><strong>${s.name}</strong></td>
+        <td>${s.group}</td>
+        <td style="text-align:center;">${s.total}</td>
+        <td><div style="display:flex;align-items:center;gap:8px;">${bar(s.avg)}<span style="font-weight:700;min-width:36px;">${s.avg}%</span></div></td>
+        <td>${statusBadge(s.avg, s.total)}</td>
+      </tr>`;
+    });
+
+    html += '</tbody></table></div></div>';
+    return html;
   },
 
   renderGroups(groups, students) {
