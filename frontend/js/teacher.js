@@ -16,12 +16,12 @@ const Teacher = {
           <p class="role-badge">Оқытушы</p>
         </div>
         <nav class="sidebar-nav">
-          <a href="#" class="nav-link ${section==='dashboard'?'active':''}" data-page="teacher">Главная</a>
-          <a href="#" class="nav-link ${section==='groups'?'active':''}" data-page="teacher-groups">Группы</a>
-          <a href="#" class="nav-link ${section==='materials'?'active':''}" data-page="teacher-materials">Материалы</a>
-          <a href="#" class="nav-link ${section==='tests'?'active':''}" data-page="teacher-tests">Тесты</a>
+          <a href="#" class="nav-link ${section==='dashboard'?'active':''}" data-page="teacher">Басты бет</a>
+          <a href="#" class="nav-link ${section==='groups'?'active':''}" data-page="teacher-groups">Топтар</a>
+          <a href="#" class="nav-link ${section==='materials'?'active':''}" data-page="teacher-materials">Материалдар</a>
+          <a href="#" class="nav-link ${section==='tests'?'active':''}" data-page="teacher-tests">Тесттер</a>
         </nav>
-        <button class="btn btn-logout" onclick="Auth.logout()">Выйти</button>
+        <button class="btn btn-logout" onclick="Auth.logout()">Шығу</button>
       </aside>
       <main class="main-content">
         ${this.renderSection(section, user, groups, students)}
@@ -43,28 +43,28 @@ const Teacher = {
     const tests = DB.get('tests') || [];
     const results = DB.get('results') || [];
     return `
-    <h2>Панель преподавателя</h2>
+    <h2>Оқытушы панелі</h2>
     <div class="stats-grid">
-      <div class="stat-card"><span class="stat-num">${groups.length}</span><span class="stat-label">Групп</span></div>
-      <div class="stat-card"><span class="stat-num">${students.length}</span><span class="stat-label">Студентов</span></div>
-      <div class="stat-card"><span class="stat-num">${tests.length}</span><span class="stat-label">Тестов</span></div>
-      <div class="stat-card"><span class="stat-num">${results.length}</span><span class="stat-label">Результатов</span></div>
+      <div class="stat-card"><span class="stat-num">${groups.length}</span><span class="stat-label">Топтар</span></div>
+      <div class="stat-card"><span class="stat-num">${students.length}</span><span class="stat-label">Студенттер</span></div>
+      <div class="stat-card"><span class="stat-num">${tests.length}</span><span class="stat-label">Тесттер</span></div>
+      <div class="stat-card"><span class="stat-num">${results.length}</span><span class="stat-label">Нәтижелер</span></div>
     </div>
     <div class="card profile-card">
       <div class="card-header">
-        <h3>Профиль преподавателя</h3>
+        <h3>Оқытушы профилі</h3>
         <button class="btn btn-sm" id="editProfileBtn" style="background:#8b5cf6;color:#fff;">Өңдеу</button>
       </div>
       <div id="profileView">
         <div class="profile-info">
           <img src="${user.photo || 'assets/placeholder.svg'}" class="avatar-lg" alt="Фото" style="width:120px;height:150px;object-fit:cover;border-radius:12px;">
           <div>
-            <p><strong>ФИО:</strong> ${user.name}</p>
-            <p><strong>Должность:</strong> ${user.position || '—'}</p>
+            <p><strong>Аты-жөні:</strong> ${user.name}</p>
+            <p><strong>Лауазымы:</strong> ${user.position || '—'}</p>
             <p><strong>Email:</strong> ${user.email}</p>
             <p><strong>Телефон:</strong> ${user.phone || '—'}</p>
             <p><strong>Telegram:</strong> ${user.telegram || '—'}</p>
-            <p><strong>О себе:</strong> ${user.bio || '—'}</p>
+            <p><strong>Өзі туралы:</strong> ${user.bio || '—'}</p>
           </div>
         </div>
       </div>
@@ -73,21 +73,21 @@ const Teacher = {
           <div class="profile-info" style="align-items:flex-start;">
             <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
               <img src="${user.photo || 'assets/placeholder.svg'}" id="profilePhotoPreview" class="avatar-lg" alt="Фото" style="width:120px;height:150px;object-fit:cover;border-radius:12px;">
-              <input type="text" id="profilePhoto" placeholder="URL фото" value="${(user.photo || '').replace(/"/g, '&quot;')}" style="width:120px;font-size:0.75rem;">
+              <input type="text" id="profilePhoto" placeholder="Фото URL" value="${(user.photo || '').replace(/"/g, '&quot;')}" style="width:120px;font-size:0.75rem;">
             </div>
             <div style="flex:1;display:flex;flex-direction:column;gap:0.5rem;">
-              <label style="font-size:0.85rem;color:var(--text-muted);">ФИО</label>
+              <label style="font-size:0.85rem;color:var(--text-muted);">Аты-жөні</label>
               <input type="text" id="profileName" value="${user.name.replace(/"/g, '&quot;')}" required>
-              <label style="font-size:0.85rem;color:var(--text-muted);">Должность</label>
-              <input type="text" id="profilePosition" value="${(user.position || '').replace(/"/g, '&quot;')}" placeholder="Должность">
+              <label style="font-size:0.85rem;color:var(--text-muted);">Лауазымы</label>
+              <input type="text" id="profilePosition" value="${(user.position || '').replace(/"/g, '&quot;')}" placeholder="Лауазымы">
               <label style="font-size:0.85rem;color:var(--text-muted);">Email</label>
               <input type="email" id="profileEmail" value="${user.email.replace(/"/g, '&quot;')}" required>
               <label style="font-size:0.85rem;color:var(--text-muted);">Телефон</label>
               <input type="text" id="profilePhone" value="${(user.phone || '').replace(/"/g, '&quot;')}" placeholder="+7 (777) 123-45-67">
               <label style="font-size:0.85rem;color:var(--text-muted);">Telegram</label>
               <input type="text" id="profileTelegram" value="${(user.telegram || '').replace(/"/g, '&quot;')}" placeholder="@username">
-              <label style="font-size:0.85rem;color:var(--text-muted);">О себе</label>
-              <textarea id="profileBio" rows="3" placeholder="Краткая информация о себе">${user.bio || ''}</textarea>
+              <label style="font-size:0.85rem;color:var(--text-muted);">Өзі туралы</label>
+              <textarea id="profileBio" rows="3" placeholder="Өзіңіз туралы қысқаша ақпарат">${user.bio || ''}</textarea>
             </div>
           </div>
           <div style="display:flex;gap:0.75rem;">
@@ -109,13 +109,32 @@ const Teacher = {
   },
 
   renderGroups(groups, students) {
-    let html = `<h2>Управление группами</h2>
+    let html = `<h2>Топтарды басқару</h2>
     <div class="card form-card">
-      <h3>Создать группу</h3>
+      <h3>Топ құру</h3>
       <form id="addGroupForm" class="inline-form">
-        <input type="text" id="groupName" placeholder="Название группы (напр. ИС-203)" required>
-        <button type="submit" class="btn btn-primary">Создать</button>
+        <input type="text" id="groupName" placeholder="Топ атауы (мыс. ИС-203)" required>
+        <button type="submit" class="btn btn-primary">Құру</button>
       </form>
+    </div>
+    <div class="card form-card">
+      <h3>Студенттерді қосу</h3>
+      <form id="bulkAddStudentsForm">
+        <select id="bulkGroup" required>
+          <option value="">Топты таңдаңыз</option>
+          ${groups.map(g => `<option value="${g.id}">${g.name}</option>`).join('')}
+        </select>
+        <textarea id="bulkNames" rows="6" placeholder="Студенттердің аты-жөнін енгізіңіз (әр жолға бір адам):&#10;Иванов Алексей&#10;Петрова Мария&#10;Сергеев Дмитрий" required></textarea>
+        <button type="submit" class="btn btn-primary">Аккаунттарды генерациялау</button>
+      </form>
+      <div id="bulkResult" style="display:none;margin-top:1rem;">
+        <h4>Құрылған аккаунттар:</h4>
+        <table class="bulk-table" style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+          <thead><tr><th style="text-align:left;padding:6px;border-bottom:2px solid var(--border);">Аты-жөні</th><th style="text-align:left;padding:6px;border-bottom:2px solid var(--border);">Логин</th><th style="text-align:left;padding:6px;border-bottom:2px solid var(--border);">Құпия сөз</th></tr></thead>
+          <tbody id="bulkResultBody"></tbody>
+        </table>
+        <button class="btn btn-sm" id="copyBulkBtn" style="margin-top:0.75rem;">Кестені көшіру</button>
+      </div>
     </div>`;
 
     groups.forEach(g => {
@@ -124,10 +143,10 @@ const Teacher = {
       <div class="card">
         <div class="card-header">
           <h4>${g.name}</h4>
-          <button class="btn btn-danger btn-sm" onclick="Teacher.deleteGroup('${g.id}')">Удалить</button>
+          <button class="btn btn-danger btn-sm" onclick="Teacher.deleteGroup('${g.id}')">Жою</button>
         </div>
-        <p>${groupStudents.length} студент(ов)</p>
-        ${groupStudents.length > 0 ? `<ul class="student-list">${groupStudents.map(s => `<li>${s.name} (${s.email})</li>`).join('')}</ul>` : ''}
+        <p>${groupStudents.length} студент</p>
+        ${groupStudents.length > 0 ? `<ul class="student-list">${groupStudents.map(s => `<li style="display:flex;justify-content:space-between;align-items:center;">${s.name} (${s.email}) <button class="btn btn-danger btn-sm" onclick="Teacher.deleteStudent('${s.id}')" style="margin-left:8px;padding:2px 8px;font-size:0.75rem;">Жою</button></li>`).join('')}</ul>` : ''}
       </div>`;
     });
     return html;
@@ -198,11 +217,84 @@ const Teacher = {
         DB.set('groups', groups);
         App.navigate('teacher-groups');
       });
+
+      document.getElementById('bulkAddStudentsForm')?.addEventListener('submit', e => {
+        e.preventDefault();
+        const groupId = document.getElementById('bulkGroup').value;
+        const raw = document.getElementById('bulkNames').value.trim();
+        if (!groupId || !raw) return;
+
+        const names = raw.split('\n').map(n => n.trim()).filter(n => n.length > 0);
+        if (names.length === 0) return;
+
+        const users = DB.get('users') || [];
+        const created = [];
+
+        names.forEach(name => {
+          const translitName = Teacher._transliterate(name.split(/\s+/).slice(0, 2).join('.')).toLowerCase();
+          let email = translitName + '@student.edu';
+          // Ensure unique email
+          let suffix = 1;
+          while (users.find(u => u.email === email)) {
+            email = translitName + suffix + '@student.edu';
+            suffix++;
+          }
+          const password = Teacher._generatePassword();
+          const user = {
+            id: 'stu-' + DB.generateId(),
+            email,
+            password,
+            name,
+            role: 'student',
+            groupId
+          };
+          users.push(user);
+          created.push({ name, email, password });
+        });
+
+        DB.set('users', users);
+
+        // Show results
+        const resultDiv = document.getElementById('bulkResult');
+        const tbody = document.getElementById('bulkResultBody');
+        tbody.innerHTML = created.map(c =>
+          `<tr><td style="padding:6px;border-bottom:1px solid var(--border);">${c.name}</td><td style="padding:6px;border-bottom:1px solid var(--border);">${c.email}</td><td style="padding:6px;border-bottom:1px solid var(--border);font-family:monospace;">${c.password}</td></tr>`
+        ).join('');
+        resultDiv.style.display = '';
+
+        document.getElementById('copyBulkBtn')?.addEventListener('click', () => {
+          const text = 'Аты-жөні\tЛогин\tҚұпия сөз\n' + created.map(c => `${c.name}\t${c.email}\t${c.password}`).join('\n');
+          navigator.clipboard.writeText(text).then(() => {
+            document.getElementById('copyBulkBtn').textContent = 'Көшірілді!';
+            setTimeout(() => { document.getElementById('copyBulkBtn').textContent = 'Кестені көшіру'; }, 2000);
+          });
+        });
+      });
     }
     if (section === 'materials') Materials.bind();
     if (section === 'tests') Tests.bindTeacher();
   },
 
+  _transliterate(str) {
+    const map = {а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'yo',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'ts',ч:'ch',ш:'sh',щ:'sch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya',ә:'a',і:'i',ң:'n',ғ:'g',ү:'u',ұ:'u',қ:'k',ө:'o',һ:'h'};
+    return str.split('').map(c => {
+      const lower = c.toLowerCase();
+      if (map[lower] !== undefined) return c === lower ? map[lower] : map[lower].charAt(0).toUpperCase() + map[lower].slice(1);
+      return c;
+    }).join('');
+  },
+  _generatePassword() {
+    const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
+    let pass = '';
+    for (let i = 0; i < 8; i++) pass += chars[Math.floor(Math.random() * chars.length)];
+    return pass;
+  },
+  deleteStudent(id) {
+    let users = DB.get('users') || [];
+    users = users.filter(u => u.id !== id);
+    DB.set('users', users);
+    App.navigate('teacher-groups');
+  },
   deleteGroup(id) {
     let groups = DB.get('groups') || [];
     groups = groups.filter(g => g.id !== id);

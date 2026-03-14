@@ -13,7 +13,7 @@ const Auth = {
   },
   register(name, email, password, groupId) {
     const users = DB.get('users') || [];
-    if (users.find(u => u.email === email)) return { error: 'Email уже зарегистрирован' };
+    if (users.find(u => u.email === email)) return { error: 'Бұл email тіркелген' };
     const user = {
       id: 'stu-' + DB.generateId(),
       email, password, name,
@@ -35,27 +35,27 @@ const Auth = {
     <div class="auth-container">
       <div class="auth-card">
         <h1 class="auth-title">EduPlatform</h1>
-        <p class="auth-subtitle">Платформа для обучения</p>
+        <p class="auth-subtitle">Оқыту платформасы</p>
         <div class="tabs">
-          <button class="tab active" data-tab="login">Вход</button>
-          <button class="tab" data-tab="register">Регистрация</button>
+          <button class="tab active" data-tab="login">Кіру</button>
+          <button class="tab" data-tab="register">Тіркелу</button>
         </div>
         <form id="loginForm" class="auth-form">
           <input type="email" id="loginEmail" placeholder="Email" required>
-          <input type="password" id="loginPass" placeholder="Пароль" required>
-          <button type="submit" class="btn btn-primary">Войти</button>
+          <input type="password" id="loginPass" placeholder="Құпия сөз" required>
+          <button type="submit" class="btn btn-primary">Кіру</button>
           <p id="loginError" class="error-msg"></p>
-          <p class="hint">Преподаватель: teacher@edu.kz / admin123</p>
+          <p class="hint">Оқытушы: teacher@edu.kz / admin123</p>
         </form>
         <form id="registerForm" class="auth-form hidden">
-          <input type="text" id="regName" placeholder="ФИО" required>
+          <input type="text" id="regName" placeholder="Аты-жөні" required>
           <input type="email" id="regEmail" placeholder="Email" required>
-          <input type="password" id="regPass" placeholder="Пароль" required minlength="6">
+          <input type="password" id="regPass" placeholder="Құпия сөз" required minlength="6">
           <select id="regGroup" required>
-            <option value="">Выберите группу</option>
+            <option value="">Топты таңдаңыз</option>
             ${groups.map(g => `<option value="${g.id}">${g.name}</option>`).join('')}
           </select>
-          <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+          <button type="submit" class="btn btn-primary">Тіркелу</button>
           <p id="regError" class="error-msg"></p>
         </form>
       </div>
@@ -79,7 +79,7 @@ const Auth = {
       if (user) {
         App.navigate(user.role === 'teacher' ? 'teacher' : 'student');
       } else {
-        document.getElementById('loginError').textContent = 'Неверный email или пароль';
+        document.getElementById('loginError').textContent = 'Email немесе құпия сөз қате';
       }
     });
     document.getElementById('registerForm').addEventListener('submit', e => {

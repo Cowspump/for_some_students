@@ -7,11 +7,11 @@ const Tests = {
     const results = DB.get('results') || [];
     const materials = DB.get('materials') || [];
 
-    let html = `<div class="tests-section"><h2>Тесты и задания</h2>
+    let html = `<div class="tests-section"><h2>Тесттер мен тапсырмалар</h2>
 
     <!-- AI Auto-generate section -->
     <div class="card form-card" style="border-left:4px solid #8b5cf6;">
-      <h3>🤖 Автогенерация теста из лекции (ИИ)</h3>
+      <h3>🤖 Лекциядан тест автогенерациясы (ИИ)</h3>
       <form id="aiGenerateForm">
         <label>Лекцияны таңдаңыз:</label>
         <select id="aiLecture" required>
@@ -27,7 +27,7 @@ const Tests = {
         </select>
         <input type="text" id="aiTestTitle" placeholder="Тест атауы (бос қалдырсаңыз автоматты жасалады)">
         <div class="checkbox-group">
-          <label><strong>Группы:</strong></label>
+          <label><strong>Топтар:</strong></label>
           ${groups.map(g => `<label><input type="checkbox" name="aiGroups" value="${g.id}"> ${g.name}</label>`).join('')}
         </div>
         <button type="submit" class="btn btn-primary" id="aiGenerateBtn" style="background:#8b5cf6;">🤖 Тест жасау (ИИ)</button>
@@ -37,24 +37,24 @@ const Tests = {
 
     <!-- Manual create section -->
     <div class="card form-card">
-      <h3>Создать тест вручную</h3>
+      <h3>Тестті қолмен құру</h3>
       <form id="createTestForm">
-        <input type="text" id="testTitle" placeholder="Название теста" required>
+        <input type="text" id="testTitle" placeholder="Тест атауы" required>
         <div class="checkbox-group">
-          <label><strong>Группы:</strong></label>
+          <label><strong>Топтар:</strong></label>
           ${groups.map(g => `<label><input type="checkbox" name="testGroups" value="${g.id}"> ${g.name}</label>`).join('')}
         </div>
         <div id="questionsContainer">
-          <h4>Вопросы</h4>
+          <h4>Сұрақтар</h4>
         </div>
-        <button type="button" class="btn btn-secondary" id="addQuestionBtn">+ Добавить вопрос</button>
-        <button type="submit" class="btn btn-primary" style="margin-top:1rem">Создать тест</button>
+        <button type="button" class="btn btn-secondary" id="addQuestionBtn">+ Сұрақ қосу</button>
+        <button type="submit" class="btn btn-primary" style="margin-top:1rem">Тест құру</button>
       </form>
     </div>
-    <h3>Существующие тесты</h3>`;
+    <h3>Бар тесттер</h3>`;
 
     if (tests.length === 0) {
-      html += '<p class="empty-state">Тестов пока нет</p>';
+      html += '<p class="empty-state">Тесттер әлі жоқ</p>';
     }
     tests.forEach(t => {
       const testResults = results.filter(r => r.testId === t.id);
@@ -64,21 +64,21 @@ const Tests = {
           <h4>${t.title}</h4>
           <div style="display:flex;gap:0.5rem;">
             <button class="btn btn-sm" onclick="Tests.editTest('${t.id}')" style="background:#8b5cf6;color:#fff;">Өңдеу</button>
-            <button class="btn btn-danger btn-sm" onclick="Tests.delete('${t.id}')">Удалить</button>
+            <button class="btn btn-danger btn-sm" onclick="Tests.delete('${t.id}')">Жою</button>
           </div>
         </div>
-        <p>${t.questions.length} вопрос(ов) · Группы: ${t.groupIds.map(gid => (groups.find(g=>g.id===gid)||{}).name || gid).join(', ')}</p>
+        <p>${t.questions.length} сұрақ · Топтар: ${t.groupIds.map(gid => (groups.find(g=>g.id===gid)||{}).name || gid).join(', ')}</p>
         ${testResults.length > 0 ? `
-        <details><summary>Результаты (${testResults.length})</summary>
+        <details><summary>Нәтижелер (${testResults.length})</summary>
           <table class="results-table">
-            <tr><th>Студент</th><th>Балл</th><th>Дата</th></tr>
+            <tr><th>Студент</th><th>Балл</th><th>Күні</th></tr>
             ${testResults.map(r => {
               const users = DB.get('users') || [];
               const stu = users.find(u => u.id === r.userId) || {};
-              return `<tr><td>${stu.name || 'N/A'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.date).toLocaleDateString('ru')}</td></tr>`;
+              return `<tr><td>${stu.name || 'N/A'}</td><td>${r.score}/${r.total}</td><td>${new Date(r.date).toLocaleDateString('kk')}</td></tr>`;
             }).join('')}
           </table>
-        </details>` : '<p class="hint">Результатов пока нет</p>'}
+        </details>` : '<p class="hint">Нәтижелер әлі жоқ</p>'}
       </div>`;
     });
     html += '</div>';
@@ -94,17 +94,17 @@ const Tests = {
       const div = document.createElement('div');
       div.className = 'question-block';
       div.innerHTML = `
-        <label>Вопрос ${qCount}</label>
-        <input type="text" class="q-text" placeholder="Текст вопроса" required>
-        <input type="text" class="q-opt" placeholder="Вариант 1" required>
-        <input type="text" class="q-opt" placeholder="Вариант 2" required>
-        <input type="text" class="q-opt" placeholder="Вариант 3" required>
-        <input type="text" class="q-opt" placeholder="Вариант 4" required>
+        <label>Сұрақ ${qCount}</label>
+        <input type="text" class="q-text" placeholder="Сұрақ мәтіні" required>
+        <input type="text" class="q-opt" placeholder="Нұсқа 1" required>
+        <input type="text" class="q-opt" placeholder="Нұсқа 2" required>
+        <input type="text" class="q-opt" placeholder="Нұсқа 3" required>
+        <input type="text" class="q-opt" placeholder="Нұсқа 4" required>
         <select class="q-answer">
-          <option value="0">Правильный: Вариант 1</option>
-          <option value="1">Правильный: Вариант 2</option>
-          <option value="2">Правильный: Вариант 3</option>
-          <option value="3">Правильный: Вариант 4</option>
+          <option value="0">Дұрыс: Нұсқа 1</option>
+          <option value="1">Дұрыс: Нұсқа 2</option>
+          <option value="2">Дұрыс: Нұсқа 3</option>
+          <option value="3">Дұрыс: Нұсқа 4</option>
         </select>`;
       container.appendChild(div);
     };
@@ -135,7 +135,7 @@ const Tests = {
       const groupIds = [...document.querySelectorAll('[name=aiGroups]:checked')].map(c => c.value);
 
       if (!lectureUrl) { alert('Лекцияны таңдаңыз'); return; }
-      if (groupIds.length === 0) { alert('Кем дегенде бір группаны таңдаңыз'); return; }
+      if (groupIds.length === 0) { alert('Кем дегенде бір топты таңдаңыз'); return; }
       if (!OpenAI.getKey()) { alert('OpenAI API кілтін баптаулардан енгізіңіз!'); return; }
 
       btn.disabled = true;
@@ -169,7 +169,7 @@ const Tests = {
 
     let html = '<div class="tests-section"><h2>Менің тесттерім</h2>';
     if (tests.length === 0) {
-      html += '<p class="empty-state">Сіздің группаңыз үшін тест жоқ</p>';
+      html += '<p class="empty-state">Сіздің топ үшін тест жоқ</p>';
     }
     tests.forEach(t => {
       const myResult = results.find(r => r.testId === t.id);
@@ -191,7 +191,7 @@ const Tests = {
         html += `<div class="card result-card">
           <strong>${test ? test.title : 'Тест жойылған'}</strong>
           <span class="score">${r.score}/${r.total}</span>
-          <span class="date">${new Date(r.date).toLocaleDateString('ru')}</span>
+          <span class="date">${new Date(r.date).toLocaleDateString('kk')}</span>
         </div>`;
       });
       html += '</div>';
@@ -204,19 +204,42 @@ const Tests = {
     const test = (DB.get('tests') || []).find(t => t.id === testId);
     if (!test) return;
     const app = document.getElementById('app');
-    let html = `<div class="test-taking" style="max-width:800px;margin:20px auto;padding:20px;">
+    const total = test.questions.length;
+    const letters = ['A', 'B', 'C', 'D'];
+
+    let html = `<div class="test-taking">
       <h2>${test.title}</h2>
+      <div class="test-counter" id="testCounter">0 / ${total} жауап берілді</div>
+      <div class="test-progress"><div class="test-progress-bar" id="testProgressBar"></div></div>
       <form id="takeTestForm">`;
     test.questions.forEach((q, i) => {
-      html += `<div class="question-card card" style="margin-bottom:16px;padding:16px;">
-        <p><strong>${i + 1}. ${q.q}</strong></p>
-        ${q.opts.map((o, j) => `<label class="radio-label" style="display:block;padding:6px 0;cursor:pointer;"><input type="radio" name="q${i}" value="${j}" required> ${o}</label>`).join('')}
+      html += `<div class="question-card">
+        <div class="q-header">
+          <span class="q-number">${i + 1}</span>
+          <span class="q-text">${q.q}</span>
+        </div>
+        <div class="option-group">
+          ${q.opts.map((o, j) => `
+            <label class="option-label">
+              <input type="radio" name="q${i}" value="${j}" required>
+              <span class="option-letter">${letters[j]}</span>
+              <span class="option-text">${o}</span>
+            </label>`).join('')}
+        </div>
       </div>`;
     });
-    html += `<button type="submit" class="btn btn-primary">Жіберу</button></form></div>`;
+    html += `<div class="test-submit-area"><button type="submit" class="btn btn-primary">Жіберу</button></div></form></div>`;
     app.innerHTML = html;
 
-    document.getElementById('takeTestForm').addEventListener('submit', e => {
+    // Live progress tracking
+    const form = document.getElementById('takeTestForm');
+    form.addEventListener('change', () => {
+      const answered = form.querySelectorAll('input[type=radio]:checked').length;
+      document.getElementById('testCounter').textContent = `${answered} / ${total} жауап берілді`;
+      document.getElementById('testProgressBar').style.width = `${(answered / total) * 100}%`;
+    });
+
+    form.addEventListener('submit', e => {
       e.preventDefault();
       const user = Auth.currentUser();
       let score = 0;
@@ -224,8 +247,7 @@ const Tests = {
       test.questions.forEach((q, i) => {
         const selected = document.querySelector(`[name=q${i}]:checked`);
         const userAnswer = selected ? parseInt(selected.value) : -1;
-        const correct = userAnswer === q.answer;
-        if (correct) score++;
+        if (userAnswer === q.answer) score++;
         answers.push(userAnswer);
       });
 
@@ -233,42 +255,46 @@ const Tests = {
       results.push({ testId, userId: user.id, score, total: test.questions.length, date: Date.now(), answers });
       DB.set('results', results);
 
-      // Show results with correct/wrong indicators
       Tests.showResults(test, answers, score);
     });
   },
 
   showResults(test, userAnswers, score) {
     const app = document.getElementById('app');
-    const pct = Math.round(score / test.questions.length * 100);
-    const color = pct >= 70 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#e74c3c';
+    const total = test.questions.length;
+    const pct = Math.round(score / total * 100);
+    const color = pct >= 70 ? 'var(--success)' : pct >= 50 ? '#f59e0b' : 'var(--danger)';
+    const letters = ['A', 'B', 'C', 'D'];
 
-    let html = `<div style="max-width:800px;margin:20px auto;padding:20px;">
-      <div class="card" style="text-align:center;padding:24px;margin-bottom:20px;border-left:4px solid ${color};">
-        <h2>Нәтиже: ${score}/${test.questions.length}</h2>
-        <p style="font-size:2rem;color:${color};font-weight:bold;">${pct}%</p>
-        <p>${pct >= 70 ? '🎉 Жарайсың!' : pct >= 50 ? '📚 Жақсы, бірақ жақсарту қажет' : '⚠️ Материалды қайта оқу ұсынылады'}</p>
+    let html = `<div class="test-taking">
+      <div class="result-banner" style="border-top:4px solid ${color};">
+        <div class="result-score" style="color:${color};">${pct}%</div>
+        <div class="result-fraction">${score} / ${total} дұрыс жауап</div>
+        <div class="result-message">${pct >= 70 ? '🎉 Жарайсың!' : pct >= 50 ? '📚 Жақсы, бірақ жақсарту қажет' : '⚠️ Материалды қайта оқу ұсынылады'}</div>
       </div>
-      <h3>Сұрақтарды талдау:</h3>`;
+      <h3 style="margin-bottom:1rem;">Сұрақтарды талдау</h3>`;
 
     test.questions.forEach((q, i) => {
       const userAns = userAnswers[i];
       const correct = userAns === q.answer;
-      const borderColor = correct ? '#22c55e' : '#e74c3c';
       const icon = correct ? '✅' : '❌';
 
-      html += `<div class="card" style="margin-bottom:12px;padding:16px;border-left:4px solid ${borderColor};">
-        <p><strong>${icon} ${i + 1}. ${q.q}</strong></p>`;
+      html += `<div class="review-card ${correct ? 'correct' : 'wrong'}">
+        <div class="q-header">
+          <span class="q-number" style="background:${correct ? 'var(--success)' : 'var(--danger)'};">${i + 1}</span>
+          <span class="q-text">${icon} ${q.q}</span>
+        </div>`;
 
       q.opts.forEach((o, j) => {
-        let style = 'padding:4px 8px;border-radius:4px;margin:2px 0;display:block;';
-        if (j === q.answer) style += 'background:#dcfce7;color:#166534;font-weight:bold;';
-        else if (j === userAns && !correct) style += 'background:#fef2f2;color:#991b1b;text-decoration:line-through;';
-        html += `<span style="${style}">${j === q.answer ? '✓' : j === userAns ? '✗' : '  '} ${o}</span>`;
+        let cls = 'review-option';
+        let mark = '';
+        if (j === q.answer) { cls += ' is-correct'; mark = '✓'; }
+        else if (j === userAns && !correct) { cls += ' is-wrong'; mark = '✗'; }
+        html += `<div class="${cls}"><span class="option-letter" style="${j === q.answer ? 'background:var(--success);color:#fff;' : j === userAns && !correct ? 'background:var(--danger);color:#fff;' : ''}">${mark || letters[j]}</span><span>${o}</span></div>`;
       });
 
       if (!correct) {
-        html += `<div style="margin-top:8px;">
+        html += `<div style="margin-top:0.75rem;">
           <button class="btn btn-sm" onclick="Tests.explainAnswer(${i}, '${test.id}')" id="explainBtn${i}" style="background:#8b5cf6;color:#fff;">🤖 Неліктен? (ИИ түсіндірсін)</button>
           <div id="explanation${i}" style="margin-top:8px;"></div>
         </div>`;
@@ -276,7 +302,7 @@ const Tests = {
       html += '</div>';
     });
 
-    html += `<button class="btn btn-primary" onclick="App.navigate('student-tests')" style="margin-top:16px;">← Тесттерге оралу</button></div>`;
+    html += `<div class="test-submit-area"><button class="btn btn-primary" onclick="App.navigate('student-tests')">← Тесттерге оралу</button></div></div>`;
     app.innerHTML = html;
   },
 
@@ -342,12 +368,12 @@ const Tests = {
           <p class="role-badge">Оқытушы</p>
         </div>
         <nav class="sidebar-nav">
-          <a href="#" class="nav-link" data-page="teacher">Главная</a>
-          <a href="#" class="nav-link" data-page="teacher-groups">Группы</a>
-          <a href="#" class="nav-link" data-page="teacher-materials">Материалы</a>
-          <a href="#" class="nav-link active" data-page="teacher-tests">Тесты</a>
+          <a href="#" class="nav-link" data-page="teacher">Басты бет</a>
+          <a href="#" class="nav-link" data-page="teacher-groups">Топтар</a>
+          <a href="#" class="nav-link" data-page="teacher-materials">Материалдар</a>
+          <a href="#" class="nav-link active" data-page="teacher-tests">Тесттер</a>
         </nav>
-        <button class="btn btn-logout" onclick="Auth.logout()">Выйти</button>
+        <button class="btn btn-logout" onclick="Auth.logout()">Шығу</button>
       </aside>
       <main class="main-content">
         <div class="tests-section">

@@ -15,12 +15,12 @@ const Student = {
           <p class="role-badge student-badge">${group ? group.name : 'Студент'}</p>
         </div>
         <nav class="sidebar-nav">
-          <a href="#" class="nav-link ${section==='dashboard'?'active':''}" data-page="student">Главная</a>
-          <a href="#" class="nav-link ${section==='materials'?'active':''}" data-page="student-materials">Материалы</a>
-          <a href="#" class="nav-link ${section==='tests'?'active':''}" data-page="student-tests">Тесты</a>
-          <a href="#" class="nav-link ${section==='ai'?'active':''}" data-page="student-ai">ИИ-помощник</a>
+          <a href="#" class="nav-link ${section==='dashboard'?'active':''}" data-page="student">Басты бет</a>
+          <a href="#" class="nav-link ${section==='materials'?'active':''}" data-page="student-materials">Материалдар</a>
+          <a href="#" class="nav-link ${section==='tests'?'active':''}" data-page="student-tests">Тесттер</a>
+          <a href="#" class="nav-link ${section==='ai'?'active':''}" data-page="student-ai">ИИ-көмекші</a>
         </nav>
-        <button class="btn btn-logout" onclick="Auth.logout()">Выйти</button>
+        <button class="btn btn-logout" onclick="Auth.logout()">Шығу</button>
       </aside>
       <main class="main-content">
         ${this.renderSection(section, user, group)}
@@ -43,15 +43,15 @@ const Student = {
     const avgScore = results.length > 0 ? Math.round(results.reduce((s,r) => s + (r.score/r.total)*100, 0) / results.length) : 0;
 
     return `
-    <h2>Добро пожаловать, ${user.name.split(' ')[0]}!</h2>
+    <h2>Қош келдіңіз, ${user.name.split(' ')[0]}!</h2>
     <div class="stats-grid">
-      <div class="stat-card"><span class="stat-num">${group ? group.name : '—'}</span><span class="stat-label">Группа</span></div>
-      <div class="stat-card"><span class="stat-num">${tests.length}</span><span class="stat-label">Доступно тестов</span></div>
-      <div class="stat-card"><span class="stat-num">${results.length}</span><span class="stat-label">Пройдено</span></div>
-      <div class="stat-card"><span class="stat-num">${avgScore}%</span><span class="stat-label">Средний балл</span></div>
+      <div class="stat-card"><span class="stat-num">${group ? group.name : '—'}</span><span class="stat-label">Топ</span></div>
+      <div class="stat-card"><span class="stat-num">${tests.length}</span><span class="stat-label">Қолжетімді тесттер</span></div>
+      <div class="stat-card"><span class="stat-num">${results.length}</span><span class="stat-label">Тапсырылған</span></div>
+      <div class="stat-card"><span class="stat-num">${avgScore}%</span><span class="stat-label">Орташа балл</span></div>
     </div>
     <div class="card">
-      <h3>Информация о преподавателе</h3>
+      <h3>Оқытушы туралы ақпарат</h3>
       ${this.renderTeacherInfo()}
     </div>`;
   },
@@ -59,7 +59,7 @@ const Student = {
   renderTeacherInfo() {
     const users = DB.get('users') || [];
     const teacher = users.find(u => u.role === 'teacher');
-    if (!teacher) return '<p>Информация недоступна</p>';
+    if (!teacher) return '<p>Ақпарат қолжетімсіз</p>';
     return `
     <div class="profile-info">
       <img src="${teacher.photo || 'assets/placeholder.svg'}" class="avatar-lg" alt="Фото" style="width:120px;height:150px;object-fit:cover;border-radius:12px;">
