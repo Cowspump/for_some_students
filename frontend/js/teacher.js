@@ -20,6 +20,7 @@ const Teacher = {
           <a href="#" class="nav-link ${section==='groups'?'active':''}" data-page="teacher-groups">Топтар</a>
           <a href="#" class="nav-link ${section==='materials'?'active':''}" data-page="teacher-materials">Материалдар</a>
           <a href="#" class="nav-link ${section==='tests'?'active':''}" data-page="teacher-tests">Тесттер</a>
+          <a href="#" class="nav-link ${section==='messages'?'active':''}" data-page="teacher-messages">Хабарламалар${(() => { const c = Messages._getUnreadCount(user.id); return c > 0 ? ` <span style="background:var(--danger);color:#fff;border-radius:50%;padding:1px 6px;font-size:0.7rem;margin-left:4px;">${c}</span>` : ''; })()}</a>
         </nav>
         <button class="btn btn-logout" onclick="Auth.logout()">Шығу</button>
       </aside>
@@ -35,6 +36,7 @@ const Teacher = {
       case 'groups': return this.renderGroups(groups, students);
       case 'materials': return Materials.render('teacher');
       case 'tests': return Tests.renderTeacher();
+      case 'messages': return Messages.renderTeacher();
       default: return this.renderDashboard(user, groups, students);
     }
   },
@@ -324,6 +326,7 @@ const Teacher = {
     }
     if (section === 'materials') Materials.bind();
     if (section === 'tests') Tests.bindTeacher();
+    if (section === 'messages') Messages.bind('teacher');
   },
 
   _transliterate(str) {

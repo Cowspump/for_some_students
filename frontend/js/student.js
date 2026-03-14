@@ -19,6 +19,7 @@ const Student = {
           <a href="#" class="nav-link ${section==='materials'?'active':''}" data-page="student-materials">Материалдар</a>
           <a href="#" class="nav-link ${section==='tests'?'active':''}" data-page="student-tests">Тесттер</a>
           <a href="#" class="nav-link ${section==='ai'?'active':''}" data-page="student-ai">ИИ-көмекші</a>
+          <a href="#" class="nav-link ${section==='messages'?'active':''}" data-page="student-messages">Хабарламалар${(() => { const c = Messages._getUnreadCount(user.id); return c > 0 ? ` <span style="background:var(--danger);color:#fff;border-radius:50%;padding:1px 6px;font-size:0.7rem;margin-left:4px;">${c}</span>` : ''; })()}</a>
         </nav>
         <button class="btn btn-logout" onclick="Auth.logout()">Шығу</button>
       </aside>
@@ -33,6 +34,7 @@ const Student = {
       case 'materials': return Materials.render('student');
       case 'tests': return Tests.renderStudent();
       case 'ai': return AIHelper.render();
+      case 'messages': return Messages.renderStudent();
       default: return this.renderDashboard(user, group);
     }
   },
@@ -82,5 +84,6 @@ const Student = {
       });
     });
     if (section === 'ai') AIHelper.bind();
+    if (section === 'messages') Messages.bind('student');
   }
 };

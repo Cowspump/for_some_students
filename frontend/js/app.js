@@ -31,6 +31,7 @@ const App = {
       if (page === 'teacher-groups') section = 'groups';
       else if (page === 'teacher-materials') section = 'materials';
       else if (page === 'teacher-tests') section = 'tests';
+      else if (page === 'teacher-messages') section = 'messages';
       html = Teacher.render(section);
       app.innerHTML = html;
       Teacher.bind(section);
@@ -39,6 +40,7 @@ const App = {
       if (page === 'student-materials') section = 'materials';
       else if (page === 'student-tests') section = 'tests';
       else if (page === 'student-ai') section = 'ai';
+      else if (page === 'student-messages') section = 'messages';
       html = Student.render(section);
       app.innerHTML = html;
       Student.bind(section);
